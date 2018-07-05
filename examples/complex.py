@@ -16,10 +16,9 @@ literals = ['=', '+', '-', '*', '/', '(', ')','%','^',',']
 
 precedence = (
     ('left', '+', '-'),
-    ('left', '*', '/'),
+    ('left', '*', '/','%'),
     ('right', 'UMINUS'),
     ('left','^'),
-    ('left','%'),
 )
 
 t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -30,7 +29,6 @@ def t_FLOAT(t):
     r'\d+[eE][-+]?\d+|(\.\d+|\d+\.\d+)([eE][-+]?\d+)?'
     t.value = float(t.value)
     return t
-
 
 def t_INT(t):
     r'(\d+|0[Xx]\d+)'
@@ -43,7 +41,6 @@ def t_INT(t):
     return t
 
 t_ignore = " \t\n"
-
 
 def t_newline(t):
     r'\n+'
@@ -68,7 +65,7 @@ def p_oper(p):
            | exp '^' exp
            | exp '%' exp
            '''
-    
+
     if p[2] == '+':
         p[0] = p[1] + p[3]
     elif p[2] == '-':
@@ -82,7 +79,6 @@ def p_oper(p):
     elif p[2] == '%':
         p[0] = p[1] % p[3]
 
-        
 
 def p_uminus(p):
     "exp : '-' exp %prec UMINUS"
@@ -92,8 +88,6 @@ def p_group(p):
     "exp : '(' exp ')'"
     p[0] = p[2]
 
-    
-## For Solving Complex Number    
 def p_complex(p):
     "exp : '(' exp ',' exp ')'"
     # i = 0
@@ -109,7 +103,6 @@ def p_num(p):
     '''
     p[0] = p[1]
 
-    
 def p_var(p):
     "exp : NAME"
     if p[1] == 'exit':
@@ -124,7 +117,6 @@ def p_var(p):
             print("No Variable Defined'%s'" % p[1])
             p[0] = 0
 
-            
 def p_expr(p):
     'st : exp'
     print(p[1])
