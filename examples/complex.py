@@ -9,7 +9,7 @@ if sys.version_info[0] >= 3:
     raw_input = input
 
 tokens = (
-    'NAME', 'INT','FLOAT','WORD'
+    'NAME', 'INT','FLOAT',
 )
 
 literals = ['=', '+', '-', '*', '/', '(', ')','%','^',',']
@@ -22,7 +22,6 @@ precedence = (
 )
 
 t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
-t_WORD = r'[0-9][a-zA-Z0-9_]*'
 
 
 def t_FLOAT(t):
@@ -120,10 +119,6 @@ def p_var(p):
 def p_expr(p):
     'st : exp'
     print(p[1])
-
-def p_word(p):
-    'exp : WORD'
-    print("IMG FOUND")
 
 def p_error(p):
     if p:
