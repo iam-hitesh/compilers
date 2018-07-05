@@ -7,7 +7,7 @@ if sys.version_info[0] >= 3:
     raw_input = input
 
 tokens = (
-    'NAME', 'NUM',
+    'NAME', 'INT','FLOAT'
 )
 
 literals = ['=', '+', '-', '*', '/', '(', ')','%','^']
@@ -22,9 +22,19 @@ precedence = (
 
 t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
-def t_NUM(t):
-    r'\d+'
-    t.value = int(t.value)
+def t_FLOAT(t):
+    r'\d+[eE][-+]?\d+|(\.\d+|\d+\.\d+)([eE][-+]?\d+)?'
+    t.value = float(t.value)
+    return t
+
+def t_INT(t):
+    r'(\d+|0[Xx]\d+)'
+    if t.value.startswith(('0x','0X')):
+        t.value = int(t.value,16)              
+    elif t.value.startswith('0'):
+        t.value = int(t.value,8)
+    else:
+        t.value = int(t.value)
     return t
 
 t_ignore = " \t\n"
@@ -76,7 +86,9 @@ def p_group(p):
     p[0] = p[2]
 
 def p_num(p):
-    "exp : NUM"
+    '''exp : INT 
+           | FLOAT
+    '''
     p[0] = p[1]
 
 def p_var(p):
@@ -115,6 +127,3 @@ while 1:
     lex.lex()
     yacc.yacc()
     yacc.parse(data)
-    
-    
-    
