@@ -1,3 +1,5 @@
+## In This Example pass any complex number in this format .   (real_part,imaginery_part)
+
 from __future__ import division
 import sys,os
 import ply.lex as lex
@@ -29,6 +31,7 @@ def t_FLOAT(t):
     t.value = float(t.value)
     return t
 
+
 def t_INT(t):
     r'(\d+|0[Xx]\d+)'
     if t.value.startswith(('0x','0X')):
@@ -40,6 +43,7 @@ def t_INT(t):
     return t
 
 t_ignore = " \t\n"
+
 
 def t_newline(t):
     r'\n+'
@@ -64,7 +68,7 @@ def p_oper(p):
            | exp '^' exp
            | exp '%' exp
            '''
-
+    
     if p[2] == '+':
         p[0] = p[1] + p[3]
     elif p[2] == '-':
@@ -78,6 +82,7 @@ def p_oper(p):
     elif p[2] == '%':
         p[0] = p[1] % p[3]
 
+        
 
 def p_uminus(p):
     "exp : '-' exp %prec UMINUS"
@@ -87,10 +92,15 @@ def p_group(p):
     "exp : '(' exp ')'"
     p[0] = p[2]
 
+    
+## For Solving Complex Number    
 def p_complex(p):
-    "exp : '(' exp ',' exp ')' '*' '(' exp ',' exp ')'"
-    img = p[4] + p[10]
-    real = p[2] + p[8]
+    "exp : '(' exp ',' exp ')'"
+    # i = 0
+    # i.real = p[2]
+    # i.imag = p[3]
+    # p[0] = i.conjugate()
+    p[0] = complex(p[2],p[4])
 
 
 def p_num(p):
@@ -99,6 +109,7 @@ def p_num(p):
     '''
     p[0] = p[1]
 
+    
 def p_var(p):
     "exp : NAME"
     if p[1] == 'exit':
@@ -113,6 +124,7 @@ def p_var(p):
             print("No Variable Defined'%s'" % p[1])
             p[0] = 0
 
+            
 def p_expr(p):
     'st : exp'
     print(p[1])
