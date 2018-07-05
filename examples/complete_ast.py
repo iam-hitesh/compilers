@@ -6,7 +6,7 @@ import sys,os
 import ply.lex as lex
 import ply.yacc as yacc
 
-graph = open("graph.dot","w+")
+graph = open("graph.dot","r+")
 
 if sys.version_info[0] >= 3:
     raw_input = input
