@@ -14,12 +14,7 @@ tokens = (
 
 literals = ['=', '+', '-', '*', '/', '(', ')','%','^',',']
 
-precedence = (
-    ('left', '+', '-'),
-    ('left', '*', '/','%'),
-    ('right', 'UMINUS'),
-    ('left','^'),
-)
+
 
 t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
@@ -50,7 +45,15 @@ def t_error(t):
     print("Invalid character '%s'" % t.value[0])
     t.lexer.skip(1)
 
+precedence = (
+    ('left', '+', '-'),
+    ('left', '*', '/','%'),
+    ('right', 'UMINUS'),
+    ('left','^'),
+)
+
 var = {}
+
 
 def p_assign(p):
     'st : NAME "=" exp'
